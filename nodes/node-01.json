@@ -1,0 +1,7 @@
+{
+  "node_id": "rx-hcm-grid-node-01",
+  "type": "microstream-distribution",
+  "expansion_level": 1,
+  "stream_batches": 10,
+  "status": "active"
+}
