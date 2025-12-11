@@ -1,0 +1,25 @@
+name: Microstream Auto Update
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # كل 12 ساعة
+  workflow_dispatch:
+
+jobs:
+  update-streams:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Update Streams
+      run: |
+        echo "auto update $(date)" >> streams-seed-01.txt
+
+    - name: Commit Changes
+      run: |
+        git config --global user.name "AhmedPeaRL"
+        git config --global user.email "blackpearl88622@gmail.com"
+        git add .
+        git commit -m "Auto update microstream batch"
+        git push
