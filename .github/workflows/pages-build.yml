@@ -24,11 +24,9 @@ jobs:
           ruby-version: '3.1'
           bundler-cache: false
 
-      - name: Install Jekyll & dependencies
+      - name: Install Jekyll dependencies
         run: |
           gem install bundler jekyll
-          bundle init
-          echo "gem 'jekyll'" >> Gemfile
           bundle install
 
       - name: Build Jekyll site
@@ -45,5 +43,5 @@ jobs:
 
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
+        id: deployment
