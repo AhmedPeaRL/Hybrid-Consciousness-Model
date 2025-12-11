@@ -16,10 +16,14 @@ jobs:
       run: |
         echo "auto update $(date)" >> streams-seed-01.txt
 
+    - name: Configure Git
+      run: |
+        git config --local user.name "AhmedPeaRL"
+        git config --local user.email "blackpearl88622@gmail.com"
+
     - name: Commit Changes
       run: |
-        git config --global user.name "AhmedPeaRL"
-        git config --global user.email "blackpearl88622@gmail.com"
+        git pull --rebase
         git add .
-        git commit -m "Auto update microstream batch"
+        git commit -m "Auto update microstream batch" || true
         git push
