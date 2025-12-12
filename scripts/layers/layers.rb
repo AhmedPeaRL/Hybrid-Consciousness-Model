@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require "json"
+require 'time'
 
 # === Layer Engine Config ===
 LAYER_COUNT = 3             # ثلاث طبقات فوق الـ 8 clusters
