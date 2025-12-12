@@ -1,0 +1,63 @@
+{
+  "generated_at": "2025-12-12T21:57:58Z",
+  "engine": "Dynamic C-Engine",
+  "cluster_count": 8,
+  "clusters": [
+    {
+      "id": 1,
+      "label": "C-1",
+      "weight": 0.38948,
+      "entropy": 0.76247,
+      "timestamp": "2025-12-12T21:57:58Z"
+    },
+    {
+      "id": 2,
+      "label": "C-2",
+      "weight": 0.22954,
+      "entropy": 0.993,
+      "timestamp": "2025-12-12T21:57:58Z"
+    },
+    {
+      "id": 3,
+      "label": "C-3",
+      "weight": 0.95329,
+      "entropy": 0.96722,
+      "timestamp": "2025-12-12T21:57:58Z"
+    },
+    {
+      "id": 4,
+      "label": "C-4",
+      "weight": 0.06283,
+      "entropy": 0.69839,
+      "timestamp": "2025-12-12T21:57:58Z"
+    },
+    {
+      "id": 5,
+      "label": "C-5",
+      "weight": 0.39057,
+      "entropy": 0.90671,
+      "timestamp": "2025-12-12T21:57:58Z"
+    },
+    {
+      "id": 6,
+      "label": "C-6",
+      "weight": 0.86478,
+      "entropy": 0.94901,
+      "timestamp": "2025-12-12T21:57:58Z"
+    },
+    {
+      "id": 7,
+      "label": "C-7",
+      "weight": 0.20404,
+      "entropy": 0.57254,
+      "timestamp": "2025-12-12T21:57:58Z"
+    },
+    {
+      "id": 8,
+      "label": "C-8",
+      "weight": 0.54262,
+      "entropy": 0.5235,
+      "timestamp": "2025-12-12T21:57:58Z"
+    }
+  ]
+}
