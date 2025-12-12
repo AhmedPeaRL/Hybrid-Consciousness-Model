@@ -1,0 +1,25 @@
+{
+  "node": "rx-hcm-grid-node-01",
+  "generated_at": "Fri Dec 12 12:41:09 UTC 2025",
+  "streams": [
+    {"batch": "streams-batch-01.txt", "lines": 10}
+,
+    {"batch": "streams-batch-02.txt", "lines": 10}
+,
+    {"batch": "streams-batch-03.txt", "lines": 10}
+,
+    {"batch": "streams-batch-04.txt", "lines": 10}
+,
+    {"batch": "streams-batch-05.txt", "lines": 10}
+,
+    {"batch": "streams-batch-06.txt", "lines": 10}
+,
+    {"batch": "streams-batch-07.txt", "lines": 10}
+,
+    {"batch": "streams-batch-08.txt", "lines": 10}
+,
+    {"batch": "streams-batch-09.txt", "lines": 10}
+,
+    {"batch": "streams-batch-10.txt", "lines": 10}
+  ]
+}
