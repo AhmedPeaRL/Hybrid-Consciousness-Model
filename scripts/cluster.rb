@@ -197,7 +197,15 @@ end
 
 # write index map
 map = {
-  generated_at: Time.now.utc.iso8601 rescue Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+   
+  require "time"
+
+begin
+  iso_time = Time.now.utc.iso8601
+rescue
+  iso_time = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+end
+  generated_at: iso_time,
   k: k,
   clusters: clusters.each_with_index.map { |cl, i|
     {
