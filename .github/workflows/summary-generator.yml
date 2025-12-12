@@ -5,6 +5,9 @@ on:
     - cron: "30 */6 * * *"    # كل 6 ساعات بعد الـ content map
   workflow_dispatch:
 
+permissions:
+  contents: write
+  
 jobs:
   build-summaries:
     runs-on: ubuntu-latest
