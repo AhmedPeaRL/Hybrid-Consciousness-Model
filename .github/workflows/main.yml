@@ -1,3 +1,0 @@
-git add .
-git commit -m "Remove conflicting cluster-map.json"
-git push
