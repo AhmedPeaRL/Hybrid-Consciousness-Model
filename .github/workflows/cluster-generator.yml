@@ -1,0 +1,45 @@
+name: Generate Clusters (C-Engine)
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 */6 * * *"   # كل 6 ساعات
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-clusters:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo (with write)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+
+      - name: Ensure output folders
+        run: |
+          mkdir -p clusters
+
+      - name: Run cluster generator
+        run: |
+          chmod +x ./scripts/cluster.rb || true
+          ruby ./scripts/cluster.rb --k 8
+
+      - name: Commit clusters if changed
+        run: |
+          git config --local user.name "AhmedPeaRL"
+          git config --local user.email "blackpearl88622@gmail.com"
+          git add clusters/ clusters.json || true
+          git diff --staged --quiet || (git commit -m "Auto-generate clusters (C-Engine) [k=8]" && git push)
