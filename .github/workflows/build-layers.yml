@@ -1,0 +1,40 @@
+name: Build C-Layers Engine
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 */12 * * *"   # كل 12 ساعة
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-layers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          bundler-cache: false
+
+      - name: Ensure scripts/layers exists
+        run: mkdir -p scripts/layers
+
+      - name: Run C-Layers Engine
+        run: ruby scripts/layers/layers.rb
+
+      - name: Commit layer-map.json
+        run: |
+          git config --local user.name "AhmedPeaRL"
+          git config --local user.email "blackpearl88622@gmail.com"
+          git add layer-map.json
+          git commit -m "Auto-generate layered resonance map" || true
+          git push
