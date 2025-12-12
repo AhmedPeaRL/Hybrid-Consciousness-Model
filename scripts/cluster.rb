@@ -1,72 +1,80 @@
 #!/usr/bin/env ruby
-# RX-HCM Cluster Generator · Node-01
-# Version: 1.1 — Stable
+# frozen_string_literal: true
 
-require "json"
-require "securerandom"
-require "time"
+require 'json'
+require 'fileutils'
+require 'optparse'
 
-# -------------------------------------------------------------------
-# 1. SAFE TIMESTAMP HANDLER (no iso8601 runtime errors)
-# -------------------------------------------------------------------
-def safe_iso_time
-  begin
-    Time.now.utc.iso8601
-  rescue
-    Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-  end
-end
+#
+# RX-HCM GRID NODE — Cluster Engine Generator (Stable Build)
+# ----------------------------------------------------------
+# Guarantees:
+#   - Always writes: ./clusters/cluster-map.json
+#   - Normalizes ALL paths regardless of runner execution directory
+#   - Creates folder if missing
+#   - Fails loudly if anything unexpected happens
+#
 
-# -------------------------------------------------------------------
-# 2. READ SEEDS FROM /streams/*.txt
-# -------------------------------------------------------------------
-stream_files = Dir.glob("streams/*.txt").sort
+# ----------------------------------------------------------
+# Resolve project root (forcefully)
+# ----------------------------------------------------------
+PROJECT_ROOT = File.expand_path(File.join(__dir__, '..'))
+CLUSTERS_DIR = File.join(PROJECT_ROOT, 'clusters')
+CLUSTER_MAP  = File.join(CLUSTERS_DIR, 'cluster-map.json')
 
-if stream_files.empty?
-  puts "No stream batches found in /streams/. Aborting."
-  exit 1
-end
+# ----------------------------------------------------------
+# Parse arguments
+# ----------------------------------------------------------
+options = { k: 4 }
+OptionParser.new do |opt|
+  opt.on('--k N', Integer, 'Number of clusters') { |v| options[:k] = v }
+end.parse!
 
-seeds = stream_files.map do |f|
+k = options[:k].to_i
+abort("Invalid cluster count!") if k <= 0
+
+# ----------------------------------------------------------
+# Ensure target directory exists
+# ----------------------------------------------------------
+FileUtils.mkdir_p(CLUSTERS_DIR)
+
+# ----------------------------------------------------------
+# Generate cluster data
+# ----------------------------------------------------------
+clusters = Array.new(k) do |i|
   {
-    file: File.basename(f),
-    lines: File.readlines(f, chomp: true).count
+    id: i + 1,
+    label: "C-#{i + 1}",
+    weight: (rand * 1.0).round(5),
+    entropy: (rand * 0.5 + 0.5).round(5),
+    timestamp: Time.now.utc.iso8601
   }
 end
 
-# -------------------------------------------------------------------
-# 3. CLUSTER BUILDING ENGINE (8 clusters default)
-# -------------------------------------------------------------------
-CLUSTER_COUNT = 8
-
-clusters = (1..CLUSTER_COUNT).map do |i|
-  {
-    id: "cluster-#{i.to_s.rjust(2, '0')}",
-    generated_at: safe_iso_time,
-    vector: SecureRandom.hex(32),
-    seed_links: seeds.sample(3) # كل Cluster مربوط بـ 3 seeds عشوائية
-  }
-end
-
-# -------------------------------------------------------------------
-# 4. FINAL CLUSTER DOCUMENT
-# -------------------------------------------------------------------
-cluster_doc = {
-  node: "rx-hcm-grid-node-01",
-  generated_at: safe_iso_time,
-  cluster_count: CLUSTER_COUNT,
-  seeds: seeds,
+cluster_map = {
+  generated_at: Time.now.utc.iso8601,
+  engine: 'Dynamic C-Engine',
+  cluster_count: k,
   clusters: clusters
 }
 
-# -------------------------------------------------------------------
-# 5. OUTPUT → /clusters/cluster-map.json (auto-created if missing)
-# -------------------------------------------------------------------
-output_dir = "clusters"
-Dir.mkdir(output_dir) unless Dir.exist?(output_dir)
+# ----------------------------------------------------------
+# Write JSON (forced absolute path)
+# ----------------------------------------------------------
+begin
+  File.open(CLUSTER_MAP, 'w') do |f|
+    f.write(JSON.pretty_generate(cluster_map))
+  end
+rescue => e
+  abort("ERROR writing cluster-map.json → #{e.message}")
+end
 
-output_path = File.join(output_dir, "cluster-map.json")
-File.write(output_path, JSON.pretty_generate(cluster_doc))
+# ----------------------------------------------------------
+# Verify file exists
+# ----------------------------------------------------------
+unless File.exist?(CLUSTER_MAP)
+  abort("Cluster map failed to save. Expected at: #{CLUSTER_MAP}")
+end
 
-puts "Cluster map generated → #{output_path}"
+puts "Cluster map generated → #{CLUSTER_MAP}"
 puts "Done."
